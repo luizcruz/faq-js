@@ -1,0 +1,182 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="jquery-1.11.1.min.js"></script>
+	<script type="text/javascript" src="json2html.js"></script>
+	<script type="text/javascript" src="jquery.json2html.js"></script>
+
+<style type="text/css">
+
+
+table.grid {
+	font-family: verdana,arial,sans-serif;
+	font-size:11px;
+	color:#333333;
+	border-width: 1px;
+	border-color: #666666;
+	border-collapse: collapse;
+	width: 700px;
+}
+table.grid th {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #dedede;
+}
+table.grid td {
+	border-width: 1px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #666666;
+	background-color: #ffffff;
+}
+
+
+
+
+	.wrapper
+{
+    width: 700px;
+    margin: 0 auto;
+}
+	.alphabet
+{
+    margin: 0 0 10px;
+    overflow: hidden;
+}
+
+    .alphabet a, #countries-table tr
+    {
+        transition: background-color 0.3s ease-in-out;
+        -moz-transition: background-color 0.3s ease-in-out;
+        -webkit-transition: background-color 0.3s ease-in-out;
+    }
+
+    .alphabet a
+    {
+        width: 20px;
+        float: left;
+        color: #333;
+        cursor: pointer;
+        height: 20px;
+        border: 1px solid #CCC;
+        display: block;
+        padding: 2px 2px;
+        font-size: 14px;
+        text-align: center;
+        line-height: 20px;
+        text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+        border-right: none;
+        text-decoration: none;
+        background-color: #F1F1F1;
+    }
+
+        .alphabet a.first
+        {
+            border-radius: 3px 0 0 3px;
+        }
+
+        .alphabet a.last
+        {
+            border-right: 1px solid silver;
+            border-radius: 0 3px 3px 0;
+        }
+
+        .alphabet a:hover,
+        .alphabet a.active
+        {
+            background: #FBF8E9;
+            font-weight: bold;
+        }
+	</style>
+</head>
+<div class="wrapper">
+
+<div class="alphabet">
+            <a class="first" href="#">0-9</a>
+            <a href="#">A</a>
+            <a href="#">B</a>
+            <a href="#">C</a>
+            <a href="#">D</a>
+            <a href="#">E</a>
+            <a href="#">F</a>
+            <a href="#">G</a>
+            <a href="#">H</a>
+            <a href="#">I</a>
+            <a href="#">J</a>
+            <a href="#">K</a>
+            <a href="#">L</a>
+            <a href="#">M</a>
+            <a href="#">N</a>
+            <a href="#">O</a>
+            <a href="#">P</a>
+            <a href="#">Q</a>
+            <a href="#">R</a>
+            <a href="#">S</a>
+            <a href="#">T</a>
+            <a href="#">U</a>
+            <a href="#">V</a>
+            <a href="#">W</a>
+            <a href="#">X</a>
+            <a href="#">Y</a>
+            <a class="last" href="#">Z</a>
+</div>
+<div id="faq">
+	<table id="faq-table" class="grid">
+	<thead>
+	<tr>
+	<th>Categoria</th>
+	<th>Termo</th>
+	<th>Significado</th>
+	</tr>
+	</thead>
+	<tbody>
+
+	</tbody>
+	</table>
+</div>
+</div>
+  <script type='text/javascript'>
+		$(document).ready(function() {
+
+			//Populate Table
+			$.getJSON( "https://spreadsheets.google.com/feeds/list/1kNWuJDa875eb8iUUsdx8R7YecyyL6zcbPqQoR_5uWNM/od6/public/values?alt=json", function list(json) {
+
+					//json.feed.entry[1].gsx$categoria.$t  					
+					var transform = {"tag":"tr","class":"${gsx$categoria.$t}","children":[
+    								{"tag":"td","html":"${gsx$categoria.$t}"},
+    								{"tag":"td","html":"${gsx$termo.$t}"},
+    								{"tag":"td","html":"${gsx$significado.$t}"}
+  									]}
+
+  					//Init condition
+  					$('#faq-table').json2html(json.feed.entry,transform);
+  					$('#faq-table > tbody > tr').show();
+						var _letter = '0-9';
+        			$('#faq-table > tbody > tr').each(function(tr) {
+        				if(!$(this).hasClass(_letter)) {$(this).hide();}
+        			});
+			});
+
+
+
+
+			$(function () {
+    			var _alphabets = $('.alphabet > a');
+    			_alphabets.click(function () {
+        			var _letter = $(this).text();
+
+        			$('#faq-table > tbody > tr').show();
+
+        			$('#faq-table > tbody > tr').each(function(tr) {
+        				if(!$(this).hasClass(_letter)) {$(this).hide();}
+        			});
+
+    			});
+			});
+
+
+	});
+	</script>
+</html>
